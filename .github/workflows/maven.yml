@@ -47,9 +47,8 @@ jobs:
         run: mvn clean install -DskipTests
 
       - name: Run unit and integration tests
-        env:
-          JAVA_TOOL_OPTIONS: -Djava.awt.headless=true
         run: mvn -X test
+        
       - name: Generate JaCoCo coverage report
         run: mvn jacoco:report
 
