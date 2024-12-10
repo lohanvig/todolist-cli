@@ -20,7 +20,6 @@ on:
 
 jobs:
   build-and-test:
-    name: Build and Test
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -45,11 +44,12 @@ jobs:
             ${{ runner.os }}-maven-
 
       - name: Install dependencies
-        run: mvn install -DskipTests
+        run: mvn clean install -DskipTests
 
       - name: Run unit and integration tests
-        run: mvn test
-
+        env:
+          JAVA_TOOL_OPTIONS: -Djava.awt.headless=true
+        run: mvn -X test
       - name: Generate JaCoCo coverage report
         run: mvn jacoco:report
 
