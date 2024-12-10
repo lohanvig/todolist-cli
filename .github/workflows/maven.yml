@@ -6,17 +6,16 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: Java CI with Maven
-
+name: CI/CD Workflow
 
 on:
-  workflow_dispatch:
   push:
     branches:
       - main
   pull_request:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   build-and-test:
@@ -35,6 +34,11 @@ jobs:
           java-version: 17
           distribution: temurin
 
+      - name: Set up Maven
+        uses: actions/setup-maven@v3
+        with:
+          maven-version: '3.8.4'
+
       - name: Cache Maven dependencies
         uses: actions/cache@v3
         with:
@@ -46,8 +50,8 @@ jobs:
       - name: Install dependencies
         run: mvn clean install -DskipTests
 
-      - name: Run unit and integration tests
-        run: mvn -X test
+      - name: Run unit and integration tests with debugging
+        run: mvn clean test -X
         
       - name: Generate JaCoCo coverage report
         run: mvn jacoco:report
